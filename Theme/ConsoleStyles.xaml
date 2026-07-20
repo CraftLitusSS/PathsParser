@@ -1,0 +1,193 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ====================================================================
+         KONSOL / LOG ICIN RENKLENDIRME
+
+         Kullanimi (RichTextBox ile):
+         <RichTextBox Style="{StaticResource ConsoleBox}">
+             <FlowDocument>
+                 <Paragraph>
+                     <Run Style="{StaticResource ConsoleGreen}" Text="File is present    " />
+                     <Run Style="{StaticResource ConsoleRed}" Text="Not signed    " />
+                     <Run Style="{StaticResource ConsoleWhite}" Text="C:\path\to\file.exe" />
+                     <Run Style="{StaticResource ConsoleHit}" Text="[Malware!]" />
+                 </Paragraph>
+             </FlowDocument>
+         </RichTextBox>
+
+         Veya ListBox + DataTemplate ile:
+         her satir bir model { Color, Text } olacak sekilde
+         ==================================================================== -->
+
+    <!-- Konsol container -->
+    <Style x:Key="ConsoleBox" TargetType="RichTextBox">
+        <Setter Property="Background" Value="{StaticResource Bg darkest brush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Border subtle brush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontFamily" Value="Consolas" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="SelectionBrush" Value="{StaticResource Neon dim brush}" />
+        <Setter Property="SelectionOpacity" Value="0.25" />
+        <Setter Property="CaretBrush" Value="{StaticResource Neon primary brush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RichTextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Padding="{TemplateBinding Padding}"
+                                      SnapsToDevicePixels="True" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Renkli Run stilleri (konsol ciktisindaki kelimeler icin) -->
+
+    <!-- "File is present" yesil -->
+    <Style x:Key="ConsoleGreen" TargetType="Run">
+        <Setter Property="Foreground" Value="#00CC66" />
+    </Style>
+
+    <!-- "Not signed" / "Malware" kirmizi -->
+    <Style x:Key="ConsoleRed" TargetType="Run">
+        <Setter Property="Foreground" Value="#FF4444" />
+    </Style>
+
+    <!-- "Signed" yesil parlak -->
+    <Style x:Key="ConsoleSigned" TargetType="Run">
+        <Setter Property="Foreground" Value="#00FF88" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <!-- "deleted" koyu kirmizi -->
+    <Style x:Key="ConsoleDeleted" TargetType="Run">
+        <Setter Property="Foreground" Value="#FF2244" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <!-- "Not MZ" sari -->
+    <Style x:Key="ConsoleWarning" TargetType="Run">
+        <Setter Property="Foreground" Value="#FFAA00" />
+    </Style>
+
+    <!-- YARA rule hit --> 
+    <Style x:Key="ConsoleHit" TargetType="Run">
+        <Setter Property="Foreground" Value="#CCFF00" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="TextEffect">
+            <Setter.Value>
+                <TextEffect Position= "0" Foreground="#CCFF00">
+                    <TextEffect.BitmapEffect>
+                        <OuterGlowBitmapEffect GlowSize="4" 
+                                               GlowColor="#CCFF00" 
+                                               Opacity="0.5" />
+                    </TextEffect.BitmapEffect>
+                </TextEffect>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Beyaz (path) -->
+    <Style x:Key="ConsoleWhite" TargetType="Run">
+        <Setter Property="Foreground" Value="#E0E0E0" />
+    </Style>
+
+    <!-- Info mesaji (mavi) -->
+    <Style x:Key="ConsoleInfo" TargetType="Run">
+        <Setter Property="Foreground" Value="#44AAFF" />
+    </Style>
+
+    <!-- Zaman damgasi (gri) -->
+    <Style x:Key="ConsoleTimestamp" TargetType="Run">
+        <Setter Property="Foreground" Value="#555555" />
+        <Setter Property="FontSize" Value="10" />
+    </Style>
+
+    <!-- ====================================================================
+         ListBox tabanli konsol (her satir bir model)
+
+         Ornek ViewModel:
+         public class LogEntry {
+             public string Text { get; set; }
+             public string Color { get; set; }  // hex renk
+             public bool IsBold { get; set; }
+         }
+
+         Kullanimi:
+         <ListBox ItemsSource="{Binding LogEntries}"
+                  Style="{StaticResource ConsoleListBox}">
+             <ListBox.ItemTemplate>
+                 <DataTemplate>
+                     <TextBlock Text="{Binding Text}"
+                                Foreground="{Binding Color, Converter={StaticResource HexToBrushConverter}}"
+                                FontWeight="{Binding IsBold, Converter={StaticResource BoolToWeightConverter}}"
+                                FontFamily="Consolas" FontSize="12" />
+                 </DataTemplate>
+             </ListBox.ItemTemplate>
+         </ListBox>
+         ==================================================================== -->
+    <Style x:Key="ConsoleListBox" TargetType="ListBox">
+        <Setter Property="Background" Value="{StaticResource Bg darkest brush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Border subtle brush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontFamily" Value="Consolas" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            SnapsToDevicePixels="True">
+                        <ScrollViewer Padding="8" Focusable="False">
+                            <ItemsPresenter SnapsToDevicePixels="True" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ConsoleListBox icin item style (satir secilemez / highlight yok) -->
+    <Style x:Key="ConsoleListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource Text primary brush}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

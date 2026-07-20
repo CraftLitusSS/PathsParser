@@ -1,5 +1,6 @@
 #include "Include.h"
 #include "Replaceparser.h"
+#include <regex>
 
 static std::wstring utf8_to_wstring(const std::string& s) {
     if (s.empty()) return {};
@@ -467,14 +468,48 @@ bool isValidPathToProcess(const std::string& path, bool searchfordll) {
 }
 
 std::string extractValidPath(const std::string& line) {
+    // Sadece path benzeri kısımları ayıklayan RegEx
+    // Örnek yakalama: "C:\Users\USER\Desktop\injector.exe" 
+    // JSON çöplerini ve komut satırı parametrelerini atlar.
+    static const std::regex pathRegex(R"([A-Za-z]:\\[^\s"\*\?\|<>]+)");
+    std::smatch match;
+    
+    if (std::regex_search(line, match, pathRegex)) {
+        std::string path = match.str(0);
+        // Eğer sonda virgül vs. kaldıysa temizle
+        while (!path.empty() && (path.back() == ',' || path.back() == '}' || path.back() == ']' || path.back() == ';' || path.back() == '\'')) {
+            path.pop_back();
+        }
+        if (isValidPathToProcess(path, scanForDLLsOnly)) {
+            return path;
+        }
+    }
+
+    // Fallback: Eski basit mantık (RegEx patlarsa diye)
     size_t p = line.find(":\\"), p2 = p;
     if (p == std::string::npos) p2 = line.find(":/");
     if (p2 == std::string::npos || p2 == 0) return "";
-    if (line.find_last_of(";", p2) != std::string::npos) return "";
+    
+    // Geçerli bir karakterle mi başlıyor? (Drive letter)
     char dl = line[p2 - 1];
     if (!std::isalpha(dl)) return "";
-    std::string path = line.substr(p2 - 1);
+    
+    // Virgüle, tırnağa veya boşluğa kadar al
+    size_t endPos = line.find_first_of(" \",;{}[]*", p2);
+    std::string path;
+    if (endPos != std::string::npos) {
+        path = line.substr(p2 - 1, endPos - (p2 - 1));
+    } else {
+        path = line.substr(p2 - 1);
+    }
+    
     std::replace(path.begin(), path.end(), '/', '\\');
+    
+    // Sondaki gereksiz karakterleri tekrar temizle
+    while (!path.empty() && (path.back() == ',' || path.back() == '}' || path.back() == ']' || path.back() == ';' || path.back() == '\'')) {
+        path.pop_back();
+    }
+    
     if (!isValidPathToProcess(path, scanForDLLsOnly)) return "";
     return path;
 }

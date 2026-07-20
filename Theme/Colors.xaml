@@ -1,0 +1,60 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ===== ZEMIN RENKLERI ===== -->
+    <Color x:Key="Bg darkest">#0A0A0A</Color>
+    <Color x:Key="Bg dark">#121212</Color>
+    <Color x:Key="Bg medium">#1A1A1A</Color>
+    <Color x:Key="Bg light">#242424</Color>
+    <Color x:Key="Bg card">#1A1A1A</Color>
+    <Color x:Key="Bg cardHover">#222222</Color>
+    <Color x:Key="Border subtle">#2A2A2A</Color>
+    <Color x:Key="Border hover">#3A3A3A</Color>
+
+    <!-- ===== NEON SARI AKSAN ===== -->
+    <Color x:Key="Neon primary">#CCFF00</Color>
+    <Color x:Key="Neon glow">#CCFF00</Color>
+    <Color x:Key="Neon dim">#99BB00</Color>
+    <Color x:Key="Neon dark">#557700</Color>
+
+    <!-- ===== YAZI RENKLERI ===== -->
+    <Color x:Key="Text primary">#E0E0E0</Color>
+    <Color x:Key="Text secondary">#888888</Color>
+    <Color x:Key="Text muted">#555555</Color>
+    <Color x:Key="Text neon">#CCFF00</Color>
+    <Color x:Key="Text disabled">#444444</Color>
+
+    <!-- ===== STATUS RENKLERI ===== -->
+    <Color x:Key="Status signed">#00CC66</Color>
+    <Color x:Key="Status unsigned">#FF4444</Color>
+    <Color x:Key="Status warning">#FFAA00</Color>
+    <Color x:Key="Status hit">#CCFF00</Color>
+    <Color x:Key="Status deleted">#FF2244</Color>
+    <Color x:Key="Status info">#44AAFF</Color>
+
+    <!-- ===== FIRCA (BRUSH) TANIMLARI ===== -->
+    <SolidColorBrush x:Key="Bg darkest brush"     Color="{StaticResource Bg darkest}" />
+    <SolidColorBrush x:Key="Bg dark brush"         Color="{StaticResource Bg dark}" />
+    <SolidColorBrush x:Key="Bg medium brush"       Color="{StaticResource Bg medium}" />
+    <SolidColorBrush x:Key="Bg light brush"        Color="{StaticResource Bg light}" />
+    <SolidColorBrush x:Key="Bg card brush"         Color="{StaticResource Bg card}" />
+    <SolidColorBrush x:Key="Border subtle brush"   Color="{StaticResource Border subtle}" />
+    <SolidColorBrush x:Key="Border hover brush"    Color="{StaticResource Border hover}" />
+
+    <SolidColorBrush x:Key="Neon primary brush"     Color="{StaticResource Neon primary}" />
+    <SolidColorBrush x:Key="Neon dim brush"         Color="{StaticResource Neon dim}" />
+    <SolidColorBrush x:Key="Neon dark brush"        Color="{StaticResource Neon dark}" />
+
+    <SolidColorBrush x:Key="Text primary brush"     Color="{StaticResource Text primary}" />
+    <SolidColorBrush x:Key="Text secondary brush"   Color="{StaticResource Text secondary}" />
+    <SolidColorBrush x:Key="Text muted brush"       Color="{StaticResource Text muted}" />
+    <SolidColorBrush x:Key="Text neon brush"        Color="{StaticResource Text neon}" />
+
+    <SolidColorBrush x:Key="Status signed brush"    Color="{StaticResource Status signed}" />
+    <SolidColorBrush x:Key="Status unsigned brush"  Color="{StaticResource Status unsigned}" />
+    <SolidColorBrush x:Key="Status warning brush"   Color="{StaticResource Status warning}" />
+    <SolidColorBrush x:Key="Status hit brush"       Color="{StaticResource Status hit}" />
+    <SolidColorBrush x:Key="Status deleted brush"   Color="{StaticResource Status deleted}" />
+    <SolidColorBrush x:Key="Status info brush"      Color="{StaticResource Status info}" />
+
+</ResourceDictionary>
